@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Research Group Information Management System",
+    "subtitle": "科研团队信息管理平台",
+    "output": "architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    { "id": "users", "type": "external", "label": "Users", "sublabel": "浏览器 / 移动端", "pos": [80, 280], "size": [120, 60] },
+    { "id": "frontend", "type": "frontend", "label": "Frontend", "sublabel": "Vue.js :5173", "pos": [280, 280], "size": [130, 60], "tag": "Vite" },
+    { "id": "backend", "type": "backend", "label": "API Server", "sublabel": "FastAPI :8000", "pos": [540, 280], "size": [130, 60] },
+    { "id": "database", "type": "database", "label": "Database", "sublabel": "SQLite", "pos": [800, 280], "size": [130, 60], "tag": "im.db" },
+    { "id": "scheduler", "type": "backend", "label": "Scheduler", "sublabel": "APScheduler", "pos": [540, 450], "size": [130, 60], "tag": "月自动导出" },
+    { "id": "auth", "type": "security", "label": "Auth", "sublabel": "JWT Token", "pos": [280, 100], "size": [130, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Information System", "wraps": ["frontend", "backend", "database", "scheduler"] }
+  ],
+  "connections": [
+    { "id": "users-to-frontend", "from": "users", "to": "frontend", "label": "HTTPS", "variant": "emphasis" },
+    { "id": "frontend-to-backend", "from": "frontend", "to": "backend", "label": "REST API", "variant": "emphasis" },
+    { "id": "backend-to-db", "from": "backend", "to": "database", "label": "SQL" },
+    { "id": "scheduler-trigger", "from": "scheduler", "to": "backend", "label": "cron: 每月1日 02:00", "variant": "dashed" },
+    { "id": "auth-verification", "from": "auth", "to": "backend", "label": "verify JWT", "variant": "security", "fromSide": "bottom", "toSide": "top", "labelDy": 60 }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Frontend", "items": ["Vue.js 3 + Vite", "Element Plus UI", "响应式表格与筛选"] },
+    { "dot": "emerald", "title": "Backend", "items": ["FastAPI REST API", "五大模块: 人员/项目/论文/知识产权/奖励荣誉", "AI 提取 + BibTeX 导入"] },
+    { "dot": "rose", "title": "Data", "items": ["SQLite 持久化", "字段驱动动态表单", "月度自动归档"] }
+  ]
+}

@@ -1,0 +1,22 @@
+# systemd 单元模板 —— 研究组信息管理后端
+#
+# 用法：
+#   1. 按你的部署路径修改下面的 WorkingDirectory / EnvironmentFile / ExecStart
+#      （PYTHON_BIN 指向你服务器上的 Python 解释器，需已安装 requirements.txt）
+#   2. sudo cp scripts/im.service /etc/systemd/system/lab_manage.service
+#   3. sudo systemctl daemon-reload && sudo systemctl enable --now lab_manage
+#   4. 查看状态：systemctl status lab_manage；日志：journalctl -u lab_manage -f
+[Unit]
+Description=Research Group Information Management API
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/lab_manage/backend
+EnvironmentFile=-/opt/lab_manage/backend/.env
+ExecStart=/usr/bin/python3 -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
